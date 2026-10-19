@@ -1,4 +1,4 @@
-[functions."0x82506D98"]
+﻿[functions."0x82506D98"]
 size = 8
 
 [functions."0x8211D4C0"]
@@ -75,3 +75,7 @@ size = 16
 
 [functions."0x82223CA0"]
 size = 8
+
+[functions."0x82223CC0"]
+size = 8
+
