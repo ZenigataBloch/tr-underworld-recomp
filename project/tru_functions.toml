@@ -72,3 +72,6 @@ size = 32
 
 [functions."0x8211B268"]
 size = 16
+
+[functions."0x82223CA0"]
+size = 8
