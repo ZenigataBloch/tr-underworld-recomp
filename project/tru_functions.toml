@@ -66,3 +66,9 @@ size = 16
 
 [functions."0x824C2BC8"]
 size = 32
+
+[functions."0x824B3470"]
+size = 32
+
+[functions."0x8211B268"]
+size = 16
