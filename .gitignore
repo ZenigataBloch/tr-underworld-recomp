@@ -1,0 +1,13 @@
+﻿out/
+work/
+logs/
+*.log
+*.iso
+*.xex
+*.pk4
+*.xbe
+*.pak
+*.bin
+*.exe
+*.dll
+*generated*/
