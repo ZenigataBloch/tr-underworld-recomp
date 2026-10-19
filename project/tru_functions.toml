@@ -54,3 +54,15 @@ size = 8
 
 [functions."0x82223CC8"]
 size = 8
+
+[functions."0x824B0288"]
+size = 48
+
+[functions."0x825702B0"]
+size = 20
+
+[functions."0x82223C60"]
+size = 16
+
+[functions."0x824C2BC8"]
+size = 32
