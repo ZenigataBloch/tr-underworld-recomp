@@ -1,4 +1,16 @@
-﻿diff --git a/src/system/runtime.cpp b/src/system/runtime.cpp
+﻿diff --git a/src/graphics/vulkan/texture_cache.cpp b/src/graphics/vulkan/texture_cache.cpp
+index ecbd940..55293c8 100644
+--- a/src/graphics/vulkan/texture_cache.cpp
++++ b/src/graphics/vulkan/texture_cache.cpp
+@@ -1229,6 +1229,7 @@ bool VulkanTextureCache::LoadTextureDataFromResidentMemoryImpl(Texture& texture,
+   const HostFormat& host_format =
+       host_format_is_signed ? host_format_pair.format_signed : host_format_pair.format_unsigned;
+   LoadShaderIndex load_shader = host_format.load_shader;
++  REXGPU_INFO("TRUDBG fmt={} dim={} w={} h={} tiled={} packed={} pitch={} mips={} endian={} sgn={} scaled={} host={} ls={}", uint32_t(texture_key.format), uint32_t(texture_key.dimension), texture_key.GetWidth(), texture_key.GetHeight(), uint32_t(texture_key.tiled), uint32_t(texture_key.packed_mips), uint32_t(texture_key.pitch), uint32_t(texture_key.mip_max_level), uint32_t(texture_key.endianness), uint32_t(host_format_is_signed), uint32_t(texture_key.scaled_resolve), uint32_t(host_format.format), uint32_t(load_shader));
+   if (load_shader == kLoadShaderIndexUnknown) {
+     return false;
+   }
+diff --git a/src/system/runtime.cpp b/src/system/runtime.cpp
 index c10694c..1f24539 100644
 --- a/src/system/runtime.cpp
 +++ b/src/system/runtime.cpp
