@@ -96,7 +96,7 @@ Lezioni:
 - Prima di ogni nuovo esperimento sul sorgente: generare il diff (le modifiche stanno solo nell'albero).
 
 ## Stato
-- (2026-10-20) Grafica: vedi sezione sopra e HANDOVER.md; prossimo passo: diff di sicurezza, baseline pulito, lettura del percorso fmt 23 in `texture_cache.cpp`.
+- (2026-10-20, fine) Progetto FERMO su richiesta dell'utente. Ultimo commit docs `173de59` (non ancora pushato al momento della stesura). SDK: `util/draw.cpp` con esperimento NOZROUND non committato. Grafica: vedi sezione sopra e HANDOVER.md; prossimo passo: diff di sicurezza, baseline pulito, lettura del percorso fmt 23 in `texture_cache.cpp`.
 - Milestone 1 in corso: menu principale raggiunto; crash dopo START su funzioni non registrate (ultimo noto `0x8225C440`). Prossimo dato atteso: output del ciclo con START e stato del primo push su GitHub.
 
 
@@ -104,3 +104,11 @@ Lezioni:
 Verificato: G (`depth_float24_convert_in_pixel_shader=true`) corregge il volto. Con G, SKIP 23/18/49/packed6 non sistemano i muri; SKIP 20 fa sparire il volto (DXT5 contiene il volto). 12 cvar testati con G (`cli3`): tutti uguali (riferito). In Vulkan G entra in `command_processor.cpp:3932` (stato viewport), non nella luce.
 Ipotesi: muri neri = ombra/illuminazione (confronto Dref o ALU), non decodifica texture. Da verificare nel traduttore SPIR-V.
 Lezione: prima di chiedere a un test "e' cambiato?", leggere l'output gia' disponibile nei log e negli esiti; non ripetere test gia' fatti.
+
+
+## 2026-10-20 (3): ultimi esperimenti e fermo
+- NODEPTH (`TRU_EXP_NODEPTH`, oDepth float24 nel pixel shader): run bloccato, chiuso dall'utente alle 09:13:39, nessun crash nel log. **Esito non valido.**
+- NOZROUND (`TRU_EXP_NOZROUND`, arrotondamento float24 di z_min/z_max in `util/draw.cpp:501`): muri neri, Lara giusta con mani luminose, identico a G. **Verificato: il clip del viewport non causa i muri neri.**
+- Ipotesi non verificata: muri neri da illuminazione/ombra nello shader.
+- Lezione: un wrapper PowerShell che fa `throw` sullo stderr di cmake/git nasconde l'errore vero. Usare `cmd /c "... > log 2>&1"` e leggere il log.
+- Lezione: dopo `Enter-VsDevShell` il PATH contiene cmake; senza, `cmake` non viene trovato.

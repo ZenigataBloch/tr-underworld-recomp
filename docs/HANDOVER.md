@@ -1,6 +1,6 @@
 # HANDOVER - Tomb Raider Underworld (Xbox 360) ricompilazione statica per PC
 
-Ultimo aggiornamento: 2026-10-20, dopo le 00:30 (ora Roma). Milestone corrente: **1 di 6, quasi chiusa**; aperto un problema grafico (muri sporchi/neri).
+Ultimo aggiornamento: 2026-10-20, dopo le 09:20 (ora Roma). **Progetto fermo su richiesta dell'utente.** Milestone corrente: **1 di 6, quasi chiusa**; aperto un problema grafico (muri sporchi/neri).
 
 ## Obiettivo
 Ricompilare staticamente la propria copia di Tomb Raider Underworld (Xbox 360) in modo che giri nativa su Windows. Base: SDK **ReXGlue v0.10.0** (kernel, GPU e audio gia' forniti; il plugin GPU `xenos` contiene sia il backend Direct3D 12 sia quello Vulkan). Non scrivere un renderer o un livello kernel propri. Le correzioni all'SDK sono patch piccole e documentate, in **un unico file diff** (`patches/rexglue-tru.diff` nel repo; bozza di lavoro `V:\DeComp\work\rexglue-tru.diff`).
@@ -121,6 +121,14 @@ Formato: `[functions."0xADDR"] size = <prossima funzione - ADDR>`. Ultimo conten
 - Ipotesi NON verificate: i muri neri vengono da ombra o illuminazione, non da decodifica texture. Candidati: confronto shadow (Dref) nel traduttore SPIR-V, operazioni ALU della luce.
 - Il diff SDK committato e' WIP: contiene TRUDBG e TRU_EXP_*. Da ripulire prima del diff finale.
 
+### Risultati 2026-10-20 (3): NODEPTH e NOZROUND (ultimi esperimenti)
+- **NODEPTH** (`TRU_EXP_NODEPTH`, `spirv_translator_rb.cpp` ~1371: conversione float24 di oDepth nel pixel shader, con G): il gioco si e' bloccato; l'utente ha chiuso il processo alle 09:13:39. Log `tru_193` senza crash. **Esito NON valido, non concluso.** Sorgente ripristinato con `git checkout`, ricompilato pulito alle 09:16, residuo verificato False.
+- **NOZROUND** (`TRU_EXP_NOZROUND`, `util/draw.cpp:501`: arrotondamento float24 di `z_min`/`z_max` del viewport, con G): muri neri, Lara giusta con mani luminose. **Identico a G.** Verificato: l'arrotondamento dei bordi di profondita' del viewport NON causa i muri neri.
+- Modifiche SDK NON committate: `util/draw.cpp` (NOZROUND; backup `draw.cpp.nozround.bak`). `spirv_translator_rb.cpp` ripristinato. `texture_cache.cpp` con `TRU_EXP_*` e' nel diff committato (`173de59`, `patches/rexglue-tru.diff`).
+- DLL del gioco attuale: build con il codice NOZROUND, inattivo senza la variabile.
+- Ipotesi NON verificata: i muri neri vengono dall'illuminazione o dall'ombra nello shader, non dal viewport e non dai formati texture.
+- Lezione (verificata): un wrapper PowerShell che fa `throw` sullo stderr di cmake/git nasconde l'errore vero. Usare `cmd /c "... > log 2>&1"`. Dopo `Enter-VsDevShell` il PATH serve per cmake.
+
 ## Aperto / non indagato
 - `d:\layer2.dat`, `d:\tr8.arg`, `game:\movies\english\medsea_loop.wmv`, `game:\movies\medsea_loop.sch`: `NtCreateFile FAILED 0xC000000F` (non trovati; confermato ancora in `tru_094.log` per `layer2.dat`, `tr8.arg`, `medsea_loop.sch`). Se i filmati manchino nell'estrazione o siano solo opzionali: **non verificato**.
 - `BaseHeap::Alloc failed to find contiguous range` / `PhysicalHeap::Alloc unable to alloc...`: molti, causa ignota; il gioco prosegue.
@@ -147,9 +155,9 @@ Formato: `[functions."0xADDR"] size = <prossima funzione - ADDR>`. Ultimo conten
 - Repo pubblico o privato (stato attuale su GitHub non verificato).
 - Licenza: SDK BSD a 3 clausole (derivata da Xenia); per GPL-2.0-or-later va conservata la nota di copyright originale (`NOTICE-ReXGlue-SDK.txt`).
 
-## Prossimi passi concreti
-1. Verificare il commit docs + diff WIP (`git log` nel repo).
-2. Leggere l'output del grep su Dref nel traduttore SPIR-V e cercare le operazioni di luce.
-3. Se un punto e' confermato: una sola modifica alla volta, misurata nei log.
+## Prossimi passi concreti (progetto fermo su richiesta utente, 2026-10-20)
+1. Push del commit docs con `git push origin main` (blocco nella chat).
+2. Prima di riprendere: `git checkout -- src/graphics/util/draw.cpp` nell'SDK, per togliere l'esperimento NOZROUND.
+3. Alla ripresa: leggere lo shader per la luce (ombra/illuminazione) e cercare dove i muri vanno a zero.
 4. Ripulire TRUDBG e TRU_EXP_* dal diff; rifare il diff finale.
 5. Controllare `tru_functions.toml` e l'avvio dopo START; rivalutare la Patch 1. Aggiornare questo file e `memory.md` a ogni passo.
